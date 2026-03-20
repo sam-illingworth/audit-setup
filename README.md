@@ -12,6 +12,59 @@ Run it periodically (e.g. monthly) to catch new features that could improve your
 4. **Presents recommendations** in five categories: Adopt, Improve, Remove, Security, Parked
 5. **Offers to implement** approved changes with per-item diffs
 
+## Example output
+
+```
+## Claude Code Setup Audit — 2026-03-20
+
+> This report contains information about your Claude Code configuration.
+> Review before sharing publicly.
+
+### Adopt (new features worth adding)
+
+1. **Effort frontmatter in skills**
+   Skills can now include an `effort` field in their frontmatter to override
+   the session effort level. Your research skill runs at default effort but
+   would benefit from `effort: max` for deeper reasoning.
+   → Add `effort: max` to the frontmatter of ~/.claude/commands/research.md
+
+2. **StopFailure hook**
+   New hook event fires when an API error occurs. You could auto-save session
+   state on failure to prevent lost work.
+   → Add a StopFailure hook to ~/.claude/settings.json that runs your
+     backup script.
+
+### Improve (existing config that could be better)
+
+3. **Hook matchers too broad**
+   Your PreToolUse hook runs on every tool call. Add a matcher to restrict it
+   to specific tools (e.g. Read calls to sensitive directories only).
+   → Add "matcher": "Read" to narrow the hook scope.
+
+### Remove (deprecated or redundant config)
+
+4. **npm-based installation**
+   Your shell alias points to an npm-installed binary. Native installation
+   is now recommended and faster.
+   → Run: curl -fsSL https://claude.ai/install.sh | sh
+     Then remove the npm alias from ~/.zshrc
+
+### Security (hardening opportunities)
+
+5. **MCP servers lack sandboxing**
+   Your custom MCP servers run without network isolation. New sandboxing
+   options restrict outbound access.
+   → Add "sandbox": true to each server entry in .mcp.json
+
+### Parked (interesting but not worth the effort right now)
+
+6. **Agent teams**
+   Experimental feature for multi-agent coordination. Powerful but high
+   token cost and not stable enough for production workflows yet.
+```
+
+*The above is illustrative. Your actual report will reflect your specific setup.*
+
 ## Security
 
 This skill was red-teamed before release. Key protections:
